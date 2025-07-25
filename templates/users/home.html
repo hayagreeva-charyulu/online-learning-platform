@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+  <h2 class="mb-4">Welcome to the Online Learning Platform</h2>
+  <p class="lead mb-4">Learn new skills, track your progress, and grow with our curated courses.</p>
+  
+  <div class="d-flex justify-content-center gap-3">
+    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Login</a>
+    <a href="{% url 'register' %}" class="btn btn-outline-success btn-lg">Register</a>
+  </div>
+</div>
+{% endblock %}

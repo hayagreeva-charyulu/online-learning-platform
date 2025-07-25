@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Your Enrolled Courses</h2>
+    
+    {% if enrollments %}
+        <div class="row">
+            {% for enrollment in enrollments %}
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ enrollment.course.title }}</h5>
+                            <p class="card-text">{{ enrollment.course.description }}</p>
+                            <p><strong>Progress:</strong> {{ enrollment.progress }}%</p>
+                            <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-primary">View Course</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You are not enrolled in any courses yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

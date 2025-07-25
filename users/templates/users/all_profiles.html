@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">All Users</h2>
+  <div class="row">
+    {% for profile in profiles %}
+      <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title text-primary">{{ profile.user.username }}</h5>
+            <p class="card-text"><strong>Role:</strong> {{ profile.user.role|capfirst }}</p>
+            <p class="card-text"><strong>Email:</strong> {{ profile.user.email }}</p>
+            <p class="card-text"><strong>Bio:</strong> {{ profile.bio|default:"No bio provided." }}</p>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No users found.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

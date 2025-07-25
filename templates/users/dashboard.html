@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Welcome -->
+    <div class="alert alert-primary shadow-sm text-center">
+        <h2>Welcome, {{ user.first_name|default:user.username }} 👋</h2>
+        <p class="mb-0">This is your dashboard.</p>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="card mb-4 shadow">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">👤 Profile Information</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Name:</strong> {{ user.get_full_name|default:user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Role:</strong> {{ user.profile.role|capfirst }}</p>
+            <p><strong>Bio:</strong> {{ user.profile.bio|default:"No bio added yet." }}</p>
+        </div>
+    </div>
+
+    <!-- Enrolled Courses (for students) -->
+    {% if user.profile.role == 'student' %}
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">📚 Your Enrolled Courses</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% if enrollments %}
+                    {% for enrollment in enrollments %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ enrollment.course.title }}</strong><br>
+                                <small>{{ enrollment.course.description }}</small>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">
+                                {{ enrollment.progress }}%
+                            </span>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item text-muted">You are not enrolled in any courses yet.</li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <!-- Created Courses (for teachers) -->
+    {% if user.profile.role == 'teacher' %}
+        <div class="card mt-4 shadow">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">📝 Courses You've Created</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for course in user.courses_created.all %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ course.title }}</strong><br>
+                            <small>{{ course.description }}</small>
+                        </div>
+                        <a href="{% url 'course_detail' course.id %}" class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted">You haven't created any courses yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

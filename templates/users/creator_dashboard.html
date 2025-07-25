@@ -1,0 +1,21 @@
+
+<h2>Creator Dashboard</h2>
+<p>Welcome, {{ request.user.username }}</p>
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h3>Welcome {{ user.username }} (Creator)</h3>
+  <a class="btn btn-success mb-3" href="{% url 'create_course' %}">+ Create New Course</a>
+  <h5>Your Courses:</h5>
+  <ul class="list-group">
+    {% for course in courses %}
+      <li class="list-group-item">
+        <strong>{{ course.title }}</strong><br>
+        <small>{{ course.description|truncatechars:80 }}</small>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No courses created yet.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
