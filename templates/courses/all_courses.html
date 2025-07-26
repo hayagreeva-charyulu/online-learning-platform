@@ -1,0 +1,22 @@
+<!-- templates/courses/all_courses.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">All Available Courses</h2>
+    <div class="row">
+        {% for course in courses %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+                        <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-outline-primary">View Course</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No courses available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -76,5 +76,10 @@ def course_list(request):
     })
 
 
+def all_courses_view(request):
+    courses = Course.objects.all()
+    return render(request, 'courses/all_courses.html', {'courses': courses})
+
+
 
 
