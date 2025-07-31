@@ -41,11 +41,13 @@ def create_course_view(request):
         form = CourseForm()
     return render(request, 'courses/create_course.html', {'form': form})
 
-def enroll_course(request, course_id):
+def enroll_course_view(request, course_id):  # <- Rename this
     course = get_object_or_404(Course, id=course_id)
 
     # Prevent duplicate enrollments
-    enrollment, created = Enrollment.objects.get_or_create(user=request.user, course=course)
+    enrollment, created = Enrollment.objects.get_or_create(
+        user=request.user, course=course
+    )
 
     if created:
         messages.success(request, f"You have enrolled in {course.title}")
@@ -77,9 +79,31 @@ def course_list(request):
 
 
 def all_courses_view(request):
-    courses = Course.objects.all()
-    return render(request, 'courses/all_courses.html', {'courses': courses})
+    user = request.user
+    enrolled_courses = Enrollment.objects.filter(user=user).values_list('course_id', flat=True)
 
+    # Show only courses the user hasn't enrolled in
+    available_courses = Course.objects.exclude(id__in=enrolled_courses)
 
+    return render(request, 'courses/all_courses.html', {
+        'available_courses': available_courses
+    })
 
+def enroll_view(request, course_id):
+    course = Course.objects.get(pk=course_id)
+    Enrollment.objects.get_or_create(user=request.user, course=course)
+    return redirect('dashboard')
 
+def unenroll_course_view(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    
+    # Try to find the enrollment
+    enrollment = Enrollment.objects.filter(user=request.user, course=course)
+    
+    if enrollment.exists():
+        enrollment.delete()
+        messages.success(request, f"You have unenrolled from {course.title}.")
+    else:
+        messages.info(request, f"You are not enrolled in {course.title}.")
+
+    return redirect('courses:enrolled_courses') 

@@ -7,6 +7,13 @@
     {% if enrollments %}
         <div class="row">
             {% for enrollment in enrollments %}
+            <p>{{ enrollment.course.title }}</p>
+
+<a href="{% url 'courses:unenroll_course' enrollment.course.id %}" class="btn btn-danger btn-sm">
+    Un Enroll Course
+</a>
+
+           
                 <div class="col-md-6 mb-3">
                     <div class="card">
                         <div class="card-body">
@@ -14,6 +21,7 @@
                             <p class="card-text">{{ enrollment.course.description }}</p>
                             <p><strong>Progress:</strong> {{ enrollment.progress }}%</p>
                             <a href="{% url 'courses:course_detail' enrollment.course.id %}" class="btn btn-primary">View Course</a>
+                            
                         </div>
                     </div>
                 </div>
